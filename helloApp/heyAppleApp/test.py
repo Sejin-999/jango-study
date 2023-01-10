@@ -33,6 +33,11 @@ def appleMailSetting(exJson):
 
 #json setting end
 
+#orderbillid 를 통한 content 가져오기 Start
+#TODO
+#
+#orderbillid 를 통한 content 가져오기 End
+
 #mail Send Start
 def appleMail(email , context):
     smtp = smtplib.SMTP('smtp.gmail.com',587)

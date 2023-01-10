@@ -11,7 +11,7 @@ from django.db import models
 class Fruit(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=20)
-    havest = models.CharField(max_length=20)
+    harvest = models.CharField(max_length=20)
     content = models.CharField(max_length=512)
     price = models.IntegerField()
     calorie = models.IntegerField()
@@ -41,6 +41,7 @@ class Fruitorderbill(models.Model):
 class Image(models.Model):
     id = models.BigAutoField(primary_key=True)
     s3_image_url = models.CharField(max_length=512)
+    s3_result_image_url = models.CharField(max_length=512, blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     is_deleted = models.IntegerField()
@@ -54,6 +55,7 @@ class Orderbill(models.Model):
     id = models.BigAutoField(primary_key=True)
     image = models.ForeignKey(Image, models.DO_NOTHING)
     date_of_purchase = models.DateTimeField()
+    total_price = models.BigIntegerField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     is_deleted = models.IntegerField()
