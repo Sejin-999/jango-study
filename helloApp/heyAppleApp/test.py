@@ -1,5 +1,6 @@
 import smtplib
 import json
+import pymysql
 import requests
 from parse import *
 from email.mime.text import MIMEText
@@ -35,7 +36,20 @@ def appleMailSetting(exJson):
 
 #orderbillid 를 통한 content 가져오기 Start
 #TODO
-#
+#dbconnect Start
+def dbcon():
+    db = pymysql.Connect(host='localhost' ,user="root" , password="1234", database="heyAppledb")
+    cursor = db.cursor()
+
+    query="select * from FruitOrderBill"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    print(result)
+#dbconnect End
+
+
+#Total price 
+#fruit name -> count & price  
 #orderbillid 를 통한 content 가져오기 End
 
 #mail Send Start
@@ -53,8 +67,8 @@ def appleMail(email , context):
     smtp.quit()    
 #mail Send End
 # 함수실행 줄 Start
-appleMailSetting(exJson)
-appleMail(email ,context)
+#appleMailSetting(exJson)
+#appleMail(email ,context)
 # 함수실행 줄 End
 
 # check value Start
