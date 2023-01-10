@@ -37,14 +37,23 @@ def appleMailSetting(exJson):
 #orderbillid 를 통한 content 가져오기 Start
 #TODO
 #dbconnect Start
-def dbcon():
+def dbcon(Orderbillid):
+    print("dbcon orderbillID : "+Orderbillid) #오더아이디가 잘넘어왔나요?
+    global totalPrice , fruitName , count
     db = pymysql.Connect(host='localhost' ,user="root" , password="1234", database="heyAppledb")
     cursor = db.cursor()
 
-    query="select * from FruitOrderBill"
+    query="select total_price from OrderBill where id ="+orderbillid #Total price
     cursor.execute(query)
+    result = cursor.fetchone() #result는 tuple 임 ... 배열로 값들이 들어와있어서 꺼낼때 한번더 꺼내주기
+    totalPrice = result[0]
+    print(totalPrice)
+    
+    query2="select Distinct fruit_id , count from FruitOrderBill where orderbill_id =1" #fruit_id & count 
+    cursor.execute(query2)
     result = cursor.fetchall()
-    print(result)
+    for i in result:
+        print(i)
 #dbconnect End
 
 
@@ -67,10 +76,12 @@ def appleMail(email , context):
     smtp.quit()    
 #mail Send End
 # 함수실행 줄 Start
-#appleMailSetting(exJson)
+appleMailSetting(exJson)
+dbcon(orderbillid)
 #appleMail(email ,context)
 # 함수실행 줄 End
 
 # check value Start
 #print(subject)
+#print(orderbillid)
 # check value End
