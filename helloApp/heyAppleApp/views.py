@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Fruit
-from .serializers import TestFruitSerializer
+from .serializers import FruitSerializer
 
 # Create your views here.
 
@@ -18,7 +18,7 @@ from .serializers import TestFruitSerializer
 def getFruitInfo(request):
     datas = Fruit.objects.filter(is_deleted =1).all()
     if datas is not None:  # datas != none
-        serializer = TestFruitSerializer(datas , many=True)
+        serializer = FruitSerializer(datas , many=True)
         return Response(serializer.data , status=status.HTTP_200_OK)
     return JsonResponse({"msg":"Infomation not found"} , status=status.HTTP_401_UNAUTHORIZED)
 
@@ -30,7 +30,7 @@ def postFruitFind(request):
     name = reqData['name']  #id or name 
     data = Fruit.objects.filter(name = name)
     if data is not None:  # datas != none
-        serializer = TestFruitSerializer(data,many=True)
+        serializer = FruitSerializer(data,many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return JsonResponse({"msg":"Infomation not found"} , status=status.HTTP_401_UNAUTHORIZED)
 
