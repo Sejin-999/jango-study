@@ -15,7 +15,7 @@ exJson = '{"email" : "1106q@naver.com" , "orderbillid" : "1"}'
 #mail setting Start
 def appleMailSetting(exJson):
     #setting start
-    global email , subject , orderbillid
+    global subject
     loadsJson = json.loads(exJson)
     email = loadsJson["email"]
     orderbillid = loadsJson["orderbillid"]
@@ -39,8 +39,9 @@ def appleMailSetting(exJson):
 #orderbillid 를 통한 content 가져오기 Start
 #TODO
 #dbconnect Start
-def dbcon(email,Orderbillid):
-    print("dbcon orderbillID : "+Orderbillid) #오더아이디가 잘넘어왔나요?
+def dbcon(email,orderbillid):
+    email = email
+    print("dbcon orderbillID : "+orderbillid) #오더아이디가 잘넘어왔나요?
     #global totalPrice , fruitName , count
     global saveInfo
     db = pymysql.Connect(host='localhost' ,user="root" , password="1234", database="heyAppledb")
@@ -91,11 +92,13 @@ def dbcon(email,Orderbillid):
 
 #mail Send Start
 def appleMail(email , saveInfo):
-    print(email)
+    context
     for i in range(len(saveInfo)):
         for j in range(len(saveInfo[i])): # name , price , count
             print(saveInfo[i][j])
+            
         print()
+    print(context)
     '''
     smtp = smtplib.SMTP('smtp.gmail.com',587)
     smtp.starttls()
@@ -104,11 +107,13 @@ def appleMail(email , saveInfo):
 
     msg = MIMEText(context)
     msg['Subject'] = subject
+    msg['From']= "hey,Apple"
 
     smtp.sendmail('testproject9197@gmail.com',email,msg.as_string())
 
-    smtp.quit()   
-    ''' 
+    smtp.quit()  
+    '''
+
 #mail Send End
 # 함수실행 줄 Start
 appleMailSetting(exJson)
