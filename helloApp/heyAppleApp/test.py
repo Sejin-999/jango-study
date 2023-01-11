@@ -7,7 +7,6 @@ from email.mime.text import MIMEText
 
 #exParam = requests.get("http://127.0.0.1:8000", params={"email" : "1106q@naver.com" , "orderbillid" : "1"})
 #print(exParam.text)
-context = "TEST 입니다"
 
 # json setting Start
 exJson = '{"email" : "1106q@naver.com" , "orderbillid" : "1"}'
@@ -23,7 +22,7 @@ def appleMailSetting(exJson):
     
     # parshing start
     idparse = parse("{}@naver.com",email)
-    subject = idparse[0]+"님 구매 감사합니다!"
+    subject = idparse[0]
     # parshing end
     '''
     # Test code start
@@ -47,13 +46,13 @@ def dbcon(email,orderbillid):
     db = pymysql.Connect(host='localhost' ,user="root" , password="1234", database="heyAppledb")
     cursor = db.cursor()
 
-    query="select total_price from OrderBill where id ="+orderbillid #Total price
+    query="select total_price from heyAppleApp_OrderBill where id ="+orderbillid #Total price
     cursor.execute(query)
     result = cursor.fetchone() #result는 tuple 임 ... 배열로 값들이 들어와있어서 꺼낼때 한번더 꺼내주기
     totalPrice = result[0]
     #print(totalPrice)
     
-    query2="select Distinct fruit_id , count from FruitOrderBill where orderbill_id =1" #fruit_id & count 
+    query2="select Distinct fruit_id , count from heyAppleApp_FruitOrderBill where orderbill_id =1" #fruit_id & count 
     cursor.execute(query2)
     result = cursor.fetchall()
     #print("투플사이즈:",len(result))
@@ -66,7 +65,7 @@ def dbcon(email,orderbillid):
         #print("Fruit id : ",i , "   count : ", k)
         
         #Fruit name , price 조회 start
-        query3 = "select name , price from Fruit where id ="+str(i)
+        query3 = "select name , price from heyAppleApp_Fruit where id ="+str(i)
         cursor.execute(query3)
         results= cursor.fetchall()
         saveInfo[flag][2] =  count
@@ -83,7 +82,7 @@ def dbcon(email,orderbillid):
             #two_d = [list(map(str,saveInfo)) for _ in range(len(result))]
         #Fruit name , price 조회 end
     #print(saveInfo)
-    appleMail(email ,saveInfo)
+    appleMail(email ,saveInfo, totalPrice)
 #dbconnect End
 
 #Total price 
@@ -91,28 +90,32 @@ def dbcon(email,orderbillid):
 #orderbillid 를 통한 content 가져오기 End
 
 #mail Send Start
-def appleMail(email , saveInfo):
-    context
+def appleMail(email , saveInfo, totalPrice):
+    context = "    Hey Apple 사용에 감사드립니다. " + subject +"님 \n\n\n"
     for i in range(len(saveInfo)):
         for j in range(len(saveInfo[i])): # name , price , count
-            print(saveInfo[i][j])
-            
+            #print(saveInfo[i][j])
+            contea = saveInfo[i][j]
+            print(contea)
+            context = context +" "+str(contea)
+        context +="\n"
         print()
+    context = context + "\n 총가격 : " + str(totalPrice) +"\n url 넣을 공간"
     print(context)
-    '''
+    
     smtp = smtplib.SMTP('smtp.gmail.com',587)
     smtp.starttls()
     smtp.login('testproject9197@gmail.com','joilxdqyvpihtlkf')
 
 
     msg = MIMEText(context)
-    msg['Subject'] = subject
+    msg['Subject'] = subject +"님 감사드립니다."
     msg['From']= "hey,Apple"
-
+    msg['To']= email
     smtp.sendmail('testproject9197@gmail.com',email,msg.as_string())
 
     smtp.quit()  
-    '''
+    
 
 #mail Send End
 # 함수실행 줄 Start
